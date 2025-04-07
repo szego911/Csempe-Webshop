@@ -1,0 +1,8 @@
+<section class="container mx-auto px-4">
+  <h2 class="text-2xl font-semibold text-slate-700 text-center">
+    Népszerű autóink
+  </h2>
+  <div class="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-10">
+    <app-car-card *ngFor="let car of popularCars" [car]="car" />
+  </div>
+</section>

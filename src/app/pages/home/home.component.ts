@@ -1,15 +1,12 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { PopularCarsComponent } from '../../components/popularCars/popular-cars.component';
 
 @Component({
   selector: 'app-home',
-  imports: [],
-  template: `
-    <p>
-      home works!
-    </p>
-  `,
-  styles: ``
+  imports: [FormsModule, CommonModule, PopularCarsComponent],
+  templateUrl: './home.component.html',
 })
-export class HomeComponent {
+export class HomeComponent {}
 
-}

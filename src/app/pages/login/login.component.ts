@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-login',
   imports: [RouterLink],
   template: ` <div
-    class="flex min-h-full flex-col justify-center bg-neutral-100 px-6 lg:px-8"
+    class="flex pt-10 min-h-full flex-col bg-neutral-100 px-6 lg:px-8"
   >
     <div class="sm:mx-auto sm:w-full  sm:max-w-sm">
       <img

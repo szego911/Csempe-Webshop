@@ -1,0 +1,40 @@
+<div
+  class="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-full"
+>
+  <div class="relative p-2.5 h-60 overflow-hidden rounded-xl bg-clip-border">
+    <img
+      src="https://images.unsplash.com/photo-1629367494173-c78a56567877?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=927&amp;q=80"
+      alt="card-image"
+      class="h-full w-full object-cover rounded-md"
+    />
+  </div>
+  <div class="p-4">
+    <div class="mb-2 flex items-center justify-between">
+      <p class="text-slate-800 text-xl font-semibold">
+        {{ car.marka }} ({{ car.evjarat }})
+      </p>
+      <p class="text-cyan-600 text-md font-semibold">
+        <strong>Ár:</strong> {{ car.ar_nap_ft | number }} Ft / nap
+      </p>
+    </div>
+    <p class="text-black">
+      <strong>Fogyasztás:</strong>
+      {{ car.fogyasztas_l_100km || car.fogyasztas_kwh_100km }}
+      {{ car.uzemanyag === "elektromos" ? "kWh" : "l" }}/100km
+    </p>
+    <p class="text-black"><strong>Motor:</strong> {{ car.motor }}</p>
+    <p class="text-black"><strong>Üzemanyag:</strong> {{ car.uzemanyag }}</p>
+    <p class="text-black"><strong>Váltó:</strong> {{ car.valto }}</p>
+    <p class="text-black"><strong>Személyek:</strong> {{ car.szemelyek }}</p>
+    <p>
+      <strong>Matrica:</strong>
+      {{ car.autopalya_matrica ? "Éves országos" : "Nincs" }}
+    </p>
+    <p><strong>Felszereltség:</strong> {{ car.felszereltseg.join(", ") }}</p>
+    <button
+      class="rounded-md w-full mt-6 bg-cyan-600 py-2 px-4 text-white hover:bg-cyan-700"
+    >
+      Bérlés
+    </button>
+  </div>
+</div>

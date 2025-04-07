@@ -1,0 +1,46 @@
+<!-- car-list.component.html -->
+<div class="flex row gap-[25px] p-5 pb-0 pt-7 mx-11">
+  <label
+    ><strong>Üzemanyag:</strong>
+    <select [(ngModel)]="selectedFuel">
+      <option value="">Összes</option>
+      <option value="benzin">Benzin</option>
+      <option value="dízel">Dízel</option>
+      <option value="elektromos">Elektromos</option>
+      <option value="hibrid">Hibrid</option>
+    </select>
+  </label>
+
+  <label
+    ><strong>Váltó:</strong>
+    <select [(ngModel)]="selectedValto">
+      <option value="">Összes</option>
+      <option value="manuális">Manuális</option>
+      <option value="automata">Automata</option>
+    </select>
+  </label>
+
+  <label
+    ><strong>Min. személyek: </strong>
+    <input
+      class="border border-slate-300 rounded-md ml-2"
+      type="number"
+      [(ngModel)]="minSzemelyek"
+      min="1"
+    />
+  </label>
+
+  <label
+    ><strong> Max ár (Ft/nap):</strong>
+    <input
+      class="border border-slate-300 rounded-md ml-2"
+      type="number"
+      [(ngModel)]="maxAr"
+      min="0"
+    />
+  </label>
+</div>
+
+<div class="car-grid mx-10">
+  <app-car-card *ngFor="let car of filteredCars()" [car]="car" />
+</div>

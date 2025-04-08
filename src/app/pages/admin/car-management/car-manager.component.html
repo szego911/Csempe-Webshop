@@ -1,0 +1,41 @@
+<div class="p-4 max-w-xl mx-auto">
+  <h2 class="text-xl font-bold mb-4">Autók kezelése</h2>
+
+  <div class="mb-4 space-y-2">
+    <input
+      type="text"
+      [(ngModel)]="newCar.name"
+      placeholder="Autó neve"
+      class="border p-2 w-full rounded"
+    />
+    <input
+      type="number"
+      [(ngModel)]="newCar.price"
+      placeholder="Ár"
+      class="border p-2 w-full rounded"
+    />
+    <button
+      (click)="addCar()"
+      class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+    >
+      Hozzáadás
+    </button>
+  </div>
+
+  <ul class="space-y-2">
+    <li
+      *ngFor="let car of cars"
+      class="border rounded p-3 flex justify-between items-center"
+    >
+      <div>
+        <strong>{{ car.name }}</strong> – {{ car.price }} HUF
+      </div>
+      <button
+        (click)="deleteCar(car.id!)"
+        class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+      >
+        Törlés
+      </button>
+    </li>
+  </ul>
+</div>

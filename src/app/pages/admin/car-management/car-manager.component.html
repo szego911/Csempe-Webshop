@@ -1,129 +1,131 @@
-<div class="max-w-3xl mx-auto p-6">
-  <h2 class="text-2xl font-bold mb-4">Autó hozzáadása</h2>
+<div class="p-4 max-w-3xl mx-auto space-y-6">
+  <h2 class="text-2xl font-bold">Autó hozzáadása</h2>
 
-  <form
-    (ngSubmit)="addCar()"
-    #carForm="ngForm"
-    class="grid grid-cols-1 gap-4 bg-white p-6 rounded-xl shadow-md"
-  >
+  <form (ngSubmit)="addCar()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <input
-      class="input"
+      type="text"
+      class="p-2 border rounded"
+      placeholder="Márka"
       [(ngModel)]="newCar.marka"
       name="marka"
-      placeholder="Márka"
       required
     />
 
     <input
-      class="input"
       type="number"
+      class="p-2 border rounded"
+      placeholder="Évjárat"
       [(ngModel)]="newCar.evjarat"
       name="evjarat"
-      placeholder="Évjárat"
-      required
+      min="1900"
+      max="{{ currentYear }}"
     />
 
     <select
-      class="input"
       [(ngModel)]="newCar.uzemanyag"
       name="uzemanyag"
-      required
+      class="p-2 border rounded"
     >
-      <option value="" disabled selected>Válassz üzemanyagot</option>
-      <option *ngFor="let u of uzemanyagTipusok" [value]="u">{{ u }}</option>
+      <option value="" disabled selected>Üzemanyag típusa</option>
+      <option *ngFor="let tipus of uzemanyagtipusok" [value]="tipus">
+        {{ tipus }}
+      </option>
+    </select>
+
+    <select [(ngModel)]="newCar.valto" name="valto" class="p-2 border rounded">
+      <option value="" disabled selected>Váltó típusa</option>
+      <option *ngFor="let tipus of valtotipusok" [value]="tipus">
+        {{ tipus }}
+      </option>
     </select>
 
     <input
-      class="input"
+      type="text"
+      class="p-2 border rounded"
+      placeholder="Motor típusa"
       [(ngModel)]="newCar.motor"
       name="motor"
-      placeholder="Motor típusa"
-      required
     />
 
-    <select class="input" [(ngModel)]="newCar.valto" name="valto" required>
-      <option value="" disabled selected>Válassz váltót</option>
-      <option *ngFor="let v of valtoTipusok" [value]="v">{{ v }}</option>
-    </select>
-
     <input
-      class="input"
       type="number"
+      class="p-2 border rounded"
+      placeholder="Személyek száma"
       [(ngModel)]="newCar.szemelyek"
       name="szemelyek"
-      placeholder="Személyek száma"
-      required
+      min="1"
     />
 
     <input
-      class="input"
       type="number"
+      class="p-2 border rounded"
+      placeholder="Fogyasztás (l/100km)"
       [(ngModel)]="newCar.fogyasztas_l_100km"
       name="fogyasztas_l"
-      placeholder="Fogyasztás (l/100km)"
     />
 
+    <label for="ar_nap_ft">Ár / nap</label>
     <input
-      class="input"
       type="number"
-      [(ngModel)]="newCar.fogyasztas_kwh_100km"
-      name="fogyasztas_kwh"
-      placeholder="Fogyasztás (kWh/100km)"
-    />
-    <Label for="ar_nap">Forint / nap</Label>
-    <input
-      class="input"
-      type="number"
-      [(ngModel)]="newCar.ar_nap_ft"
-      name="ar_nap"
+      class="p-2 border rounded"
       placeholder="Ár naponta (Ft)"
-      required
+      [(ngModel)]="newCar.ar_nap_ft"
+      name="ar_nap_ft"
+      min="0"
     />
 
-    <label class="flex items-center gap-2">
+    <label class="flex items-center space-x-2 col-span-2">
       <input
         type="checkbox"
         [(ngModel)]="newCar.autopalya_matrica"
-        name="autopalya"
-        class="accent-blue-600"
+        name="autopalya_matrica"
       />
-      Autópálya matrica van
+      <span>Van autópálya matrica</span>
     </label>
 
-    <input
-      class="input"
-      [(ngModel)]="felszereltsegInput"
-      name="felszereltseg"
-      placeholder="Felszereltség (vesszőkkel elválasztva)"
-      (input)="updateFelszereltseg()"
-    />
+    <div class="col-span-2">
+      <h3 class="font-semibold">Felszereltség</h3>
+      <div class="flex flex-wrap gap-4 mt-2">
+        <label
+          *ngFor="let felszereles of felszerelesTipusok"
+          class="flex items-center space-x-2"
+        >
+          <input
+            type="checkbox"
+            [ngModel]="newCar.felszereltseg.includes(felszereles)"
+            (ngModelChange)="updateFelszereltseg(felszereles, $event)"
+            name="felszereltseg_{{ felszereles }}"
+          />
+          <span>{{ felszereles }}</span>
+        </label>
+      </div>
+    </div>
 
     <button
       type="submit"
-      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+      class="col-span-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
     >
       Autó hozzáadása
     </button>
   </form>
 
-  <hr class="my-6" />
+  <hr />
 
-  <h2 class="text-2xl font-bold mb-4">Elérhető autók</h2>
-
+  <h2 class="text-xl font-semibold mt-6">Mentett autók</h2>
   <div class="grid gap-4">
     <div
       *ngFor="let car of cars"
-      class="bg-white p-4 rounded-xl shadow-md flex justify-between items-center"
+      class="border rounded p-4 shadow flex justify-between items-center"
     >
       <div>
-        <p class="text-lg font-semibold">{{ car.marka }} ({{ car.evjarat }})</p>
-        <p class="text-sm text-gray-600">
-          {{ car.ar_nap_ft | number }} Ft / nap
-        </p>
+        <div class="font-bold">{{ car.marka }} ({{ car.evjarat }})</div>
+        <div class="text-sm text-gray-600">
+          {{ car.uzemanyag }} • {{ car.valto }}
+        </div>
       </div>
       <button
         (click)="deleteCar(car.id)"
-        class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
+        class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
       >
         Törlés
       </button>

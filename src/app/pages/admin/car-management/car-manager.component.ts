@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IndexedDBService } from '../../../services/indexedDB.service';
+import { SyncService } from '../../../services/sync.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Car } from '../../car-list/car.model';
@@ -13,33 +13,47 @@ import { Car } from '../../car-list/car.model';
 export class CarManagerComponent implements OnInit {
   cars: Car[] = [];
   newCar: Car = this.getEmptyCar();
-  felszereltsegInput: string = '';
 
-  uzemanyagTipusok = ['Benzin', 'Dízel', 'Elektromos', 'Hibrid'];
-  valtoTipusok = ['Manuális', 'Automata'];
+  currentYear = new Date().getFullYear();
+  uzemanyagtipusok = ['Benzin', 'Dízel', 'Elektromos', 'Hibrid'];
+  valtotipusok = ['Manuális', 'Automata'];
+  felszerelesTipusok = ['Klíma', 'Navigáció', 'Bluetooth', 'Tempomat'];
 
-  constructor(private dbService: IndexedDBService) {}
+  updateFelszereltseg(felszereles: string, checked: boolean) {
+    const index = this.newCar.felszereltseg.indexOf(felszereles);
+    if (checked && index === -1) {
+      this.newCar.felszereltseg.push(felszereles);
+    } else if (!checked && index !== -1) {
+      this.newCar.felszereltseg.splice(index, 1);
+    }
+  }
+
+  constructor(private syncService: SyncService) {}
 
   async ngOnInit() {
     await this.loadCars();
   }
 
   async loadCars() {
-    this.cars = await this.dbService.getAllData();
+    this.cars = await this.syncService.getCars();
   }
 
   async addCar() {
     if (!this.isValidCar(this.newCar)) return;
 
-    await this.dbService.addData(this.newCar);
+    await this.syncService.addCar(this.newCar);
     this.newCar = this.getEmptyCar();
-    this.felszereltsegInput = '';
+    await this.loadCars();
+  }
+
+  async deleteCar(id: number) {
+    await this.syncService.deleteCar(id.toString());
     await this.loadCars();
   }
 
   getEmptyCar(): Car {
     return {
-      id: 0, // automatikusan generálódik az IndexedDB-ben
+      id: 0,
       marka: '',
       evjarat: new Date().getFullYear(),
       uzemanyag: '',
@@ -47,7 +61,6 @@ export class CarManagerComponent implements OnInit {
       valto: '',
       szemelyek: 5,
       fogyasztas_l_100km: undefined,
-      fogyasztas_kwh_100km: undefined,
       ar_nap_ft: 0,
       autopalya_matrica: false,
       felszereltseg: [],
@@ -69,17 +82,5 @@ export class CarManagerComponent implements OnInit {
       return false;
     }
     return true;
-  }
-
-  updateFelszereltseg() {
-    this.newCar.felszereltseg = this.felszereltsegInput
-      .split(',')
-      .map((s) => s.trim())
-      .filter((s) => s.length > 0);
-  }
-
-  async deleteCar(id: number) {
-    await this.dbService.deleteData(id);
-    await this.loadCars();
   }
 }

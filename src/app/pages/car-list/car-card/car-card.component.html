@@ -19,8 +19,7 @@
     </div>
     <p class="text-black">
       <strong>Fogyasztás:</strong>
-      {{ car.fogyasztas_l_100km || car.fogyasztas_kwh_100km }}
-      {{ car.uzemanyag === "elektromos" ? "kWh" : "l" }}/100km
+      {{ car.fogyasztas_l_100km }}l/100km
     </p>
     <p class="text-black"><strong>Motor:</strong> {{ car.motor }}</p>
     <p class="text-black"><strong>Üzemanyag:</strong> {{ car.uzemanyag }}</p>

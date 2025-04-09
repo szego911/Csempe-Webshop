@@ -17,7 +17,7 @@ export class IndexedDBService {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(this.dbName, 1);
 
-      request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
+      request.onupgradeneeded = () => {
         const db = request.result;
         if (!db.objectStoreNames.contains(this.storeName)) {
           db.createObjectStore(this.storeName, {
@@ -34,23 +34,38 @@ export class IndexedDBService {
       };
 
       request.onerror = () => {
-        console.error(
-          '[IndexedDB] Error initializing database:',
-          request.error
-        );
+        console.error('[IndexedDB] Error initializing database:', request.error);
         reject(request.error);
       };
     });
   }
 
-  async addData(data: any): Promise<number> {
+  async addData(data: any): Promise<void> {
     await this.initReady;
+
+    // Mélymásolat, hogy biztosan eltávolítható legyen az id
+    const dataToAdd = JSON.parse(JSON.stringify(data));
+
+    // Töröljük az 'id' mezőt, így az IndexedDB automatikusan generálja
+    if ('id' in dataToAdd) {
+      delete dataToAdd.id;
+    }
+
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(this.storeName, 'readwrite');
       const store = transaction.objectStore(this.storeName);
-      const request = store.add(data);
-      request.onsuccess = () => resolve(request.result as number);
-      request.onerror = () => reject(request.error);
+
+      const request = store.add(dataToAdd);
+
+      request.onsuccess = () => {
+        console.log('[IndexedDB] Adat sikeresen hozzáadva');
+        resolve();
+      };
+
+      request.onerror = (event) => {
+        console.error('[IndexedDB] Hiba hozzáadáskor:', event);
+        reject(event);
+      };
     });
   }
 

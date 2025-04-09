@@ -106,7 +106,7 @@ export class CarService {
       motor: 'Long Range AWD',
       valto: 'automata',
       szemelyek: 5,
-      fogyasztas_kwh_100km: 15.0,
+      fogyasztas_l_100km: 5.0,
       ar_nap_ft: 20000,
       autopalya_matrica: true,
       felszereltseg: ['klíma', 'GPS', 'tolatókamera', 'ülésfűtés', 'autopilot'],

@@ -4,8 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
+  selector: 'app-register',
   imports: [RouterLink, FormsModule],
   template: `
     <div class="flex pt-10 min-h-full flex-col bg-neutral-100 px-6 lg:px-8">
@@ -18,7 +17,7 @@ import { AuthService } from '../../services/auth.service';
         <h2
           class="mt-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900"
         >
-          Bejelentkezés a fiókodba
+          Fiók létrehozása
         </h2>
       </div>
 
@@ -42,20 +41,11 @@ import { AuthService } from '../../services/auth.service';
           </div>
 
           <div>
-            <div class="flex items-center justify-between">
-              <label
-                for="password"
-                class="block text-sm/6 font-medium text-gray-900"
-                >Jelszó</label
-              >
-              <div class="text-sm">
-                <a
-                  href="#"
-                  class="font-semibold text-blue-600 hover:text-blue-500"
-                  >Elfelejtett jelszó?</a
-                >
-              </div>
-            </div>
+            <label
+              for="password"
+              class="block text-sm/6 font-medium text-gray-900"
+              >Jelszó</label
+            >
             <div class="mt-2">
               <input
                 type="password"
@@ -63,7 +53,7 @@ import { AuthService } from '../../services/auth.service';
                 id="password"
                 required
                 [(ngModel)]="password"
-                class="block w-full rounded-md shadow-lg bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                class="block w-full rounded-md bg-white shadow-lg px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 ngModel
               />
             </div>
@@ -74,17 +64,17 @@ import { AuthService } from '../../services/auth.service';
               type="submit"
               class="flex w-full justify-center rounded-md bg-blue-500 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Bejelentkezés
+              Regisztráció
             </button>
           </div>
         </form>
 
         <p class="mt-10 text-center text-sm/6 text-gray-500">
-          Nincs fiókod?
+          Van már fiókod?
           <a
-            routerLink="/register"
+            routerLink="/login"
             class="font-semibold text-blue-600 hover:text-blue-500"
-            >Regisztrálj!</a
+            >Lépj be!</a
           >
         </p>
       </div>
@@ -92,7 +82,7 @@ import { AuthService } from '../../services/auth.service';
   `,
   styles: ``,
 })
-export class LoginComponent {
+export class RegisterComponent {
   email: string = '';
   password: string = '';
 
@@ -100,10 +90,10 @@ export class LoginComponent {
 
   async onSubmit() {
     try {
-      await this.authService.login(this.email, this.password);
-      this.router.navigate(['/']); // vagy más route
+      await this.authService.register(this.email, this.password);
+      this.router.navigate(['/']); // vagy bárhova be szeretnéd irányítani
     } catch (error) {
-      console.error('Hiba a bejelentkezés során:', error);
+      console.error('Hiba a regisztráció során:', error);
     }
   }
 }

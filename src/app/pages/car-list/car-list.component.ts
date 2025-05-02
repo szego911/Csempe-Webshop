@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Car } from './car.model';
 import { CarService } from '../../services/car.service';
+import { SyncService } from '../../services/sync.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CarCardComponent } from './car-card/car-card.component';
@@ -20,10 +21,14 @@ export class CarListComponent implements OnInit {
   minSzemelyek: number | null = null;
   maxAr: number | null = null;
 
-  constructor(private carService: CarService) {}
+  constructor(private syncService: SyncService) {}
 
-  ngOnInit(): void {
-    this.cars = this.carService.getCars();
+  async ngOnInit() {
+    await this.loadCars();
+  }
+
+  async loadCars() {
+    this.cars = await this.syncService.getCars();
   }
 
   filteredCars(): Car[] {

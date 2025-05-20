@@ -2,11 +2,20 @@ import { Component, computed, inject } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { RouterLink } from '@angular/router';
 import { PrimaryButtonComponent } from '../primary-button/primary-button.component';
-import { LogoutButtonComponent } from "../logOutButton/logout-button.component";
+import { LogoutButtonComponent } from '../logOutButton/logout-button.component';
+import { AuthService } from '../../services/auth.service';
+import { AsyncPipe, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-header',
-  imports: [PrimaryButtonComponent, RouterLink, LogoutButtonComponent],
+  standalone: true,
+  imports: [
+    PrimaryButtonComponent,
+    RouterLink,
+    LogoutButtonComponent,
+    AsyncPipe,
+    NgIf,
+  ],
   template: `
     <div
       class="bg-slate-100 px-4 py-3 shadow-md flex justify-between items-center"
@@ -16,10 +25,18 @@ import { LogoutButtonComponent } from "../logOutButton/logout-button.component";
         <a routerLink="/home">Főoldal</a>
         <a routerLink="/products">Termékek</a>
         <a routerLink="/cars">Autóink</a>
-        <a routerLink="/login">Bejelentkezés</a>
-        <a routerLink="/register">Regisztráció</a>
-        <app-logout-button></app-logout-button>
-        <a routerLink="/profil">Profil</a>
+
+        <ng-container
+          *ngIf="authService.currentUser$ | async as user; else notLoggedIn"
+        >
+          <a routerLink="/profil">Profil</a>
+          <a routerLink="/admin">Admin</a>
+          <app-logout-button></app-logout-button>
+        </ng-container>
+        <ng-template #notLoggedIn>
+          <a routerLink="/login">Bejelentkezés</a>
+          <a routerLink="/register">Regisztráció</a>
+        </ng-template>
       </div>
 
       <app-primary-button label="{{ cartLabel() }}" routerLink="/cart" />
@@ -28,6 +45,7 @@ import { LogoutButtonComponent } from "../logOutButton/logout-button.component";
   styles: ``,
 })
 export class HeaderComponent {
+  constructor(public authService: AuthService) {}
   cartService = inject(CartService);
 
   cartLabel = computed(() => `Kosár (${this.cartService.cart().length})`);

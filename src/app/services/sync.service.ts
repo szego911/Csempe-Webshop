@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirestoreService } from './firestore.service';
 import { IndexedDBService } from './indexedDB.service';
-import { Car } from '../pages/car-list/car.model';
+import { Car } from '../models/car.model';
 
 @Injectable({ providedIn: 'root' })
 export class SyncService {

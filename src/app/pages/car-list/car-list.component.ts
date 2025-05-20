@@ -1,11 +1,11 @@
 // car-list.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Car } from './car.model';
+import { Car } from '../../models/car.model';
 import { CarService } from '../../services/car.service';
 import { SyncService } from '../../services/sync.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CarCardComponent } from './car-card/car-card.component';
+import { CarCardComponent } from '../../components/car-card/car-card.component';
 
 @Component({
   selector: 'app-car-list',

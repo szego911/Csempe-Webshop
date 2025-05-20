@@ -7,13 +7,14 @@ import {
   onAuthStateChanged,
   User,
 } from '@angular/fire/auth';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
-  currentUser$ = this.currentUserSubject.asObservable();
-
+  currentUser$ = this.currentUserSubject
+    .asObservable()
+    .pipe(distinctUntilChanged());
   constructor(private auth: Auth) {
     onAuthStateChanged(this.auth, (user) => this.currentUserSubject.next(user));
   }

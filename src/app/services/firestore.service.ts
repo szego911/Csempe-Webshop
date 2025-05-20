@@ -8,7 +8,7 @@ import {
   doc,
   CollectionReference,
 } from '@angular/fire/firestore';
-import { Car } from '../pages/car-list/car.model';
+import { Car } from '../models/car.model';
 import { Observable } from 'rxjs';
 import { firstValueFrom } from 'rxjs';
 

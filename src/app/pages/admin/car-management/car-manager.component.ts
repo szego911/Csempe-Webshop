@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SyncService } from '../../../services/sync.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Car } from '../../car-list/car.model';
+import { Car } from '../../../models/car.model';
 
 @Component({
   selector: 'app-car-manager',
@@ -64,6 +64,7 @@ export class CarManagerComponent implements OnInit {
       ar_nap_ft: 0,
       autopalya_matrica: false,
       felszereltseg: [],
+      available: true,
     };
   }
 

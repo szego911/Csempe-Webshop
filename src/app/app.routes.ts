@@ -6,6 +6,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { ProfilComponent } from './pages/profil/profil.component';
 import { CarListComponent } from './pages/car-list/car-list.component';
+import { CarManagerComponent } from './pages/admin/car-management/car-manager.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -41,6 +42,11 @@ export const routes: Routes = [
   {
     path: 'cars',
     component: CarListComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+  },
+  {
+    path: 'admin',
+    component: CarManagerComponent,
+    canActivate: [authGuard],
   },
 ];

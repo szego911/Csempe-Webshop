@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CarService } from '../../services/car.service';
-import { Car } from '../../pages/car-list/car.model';
-import { CarCardComponent } from '../../pages/car-list/car-card/car-card.component';
+import { Car } from '../../models/car.model';
+import { CarCardComponent } from '../car-card/car-card.component';
 
 @Component({
   selector: 'app-popular-cars',
@@ -16,8 +16,9 @@ export class PopularCarsComponent implements OnInit {
   constructor(private carService: CarService) {}
 
   ngOnInit(): void {
-    this.popularCars = this.carService.getCars()
-      .filter(car => car.uzemanyag)
+    this.popularCars = this.carService
+      .getCars()
+      .filter((car) => car.uzemanyag)
       .slice(0, 6); // max 6 autó
   }
 }

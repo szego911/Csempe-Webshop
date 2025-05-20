@@ -10,7 +10,10 @@
   </div>
   <div class="p-4">
     <div class="mb-2 flex items-center justify-between">
-      <p class="text-slate-800 text-xl font-semibold">
+      <p
+        [appIsAvailable]="car.available"
+        class="text-slate-800 text-xl font-semibold"
+      >
         {{ car.marka }} ({{ car.evjarat }})
       </p>
       <p class="text-cyan-600 text-md font-semibold">
@@ -19,7 +22,7 @@
     </div>
     <p class="text-black">
       <strong>Fogyasztás:</strong>
-      {{ car.fogyasztas_l_100km }}l/100km
+      {{ car.fogyasztas_l_100km }} {{ car.uzemanyag | consumptionUnit }}
     </p>
     <p class="text-black"><strong>Motor:</strong> {{ car.motor }}</p>
     <p class="text-black"><strong>Üzemanyag:</strong> {{ car.uzemanyag }}</p>
@@ -32,6 +35,7 @@
     <p><strong>Felszereltség:</strong> {{ car.felszereltseg.join(", ") }}</p>
     <button
       class="rounded-md w-full mt-6 bg-cyan-600 py-2 px-4 text-white hover:bg-cyan-700"
+      [appIsAvailable]="car.available"
     >
       Bérlés
     </button>

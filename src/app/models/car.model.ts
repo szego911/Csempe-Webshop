@@ -11,4 +11,5 @@ export interface Car {
   ar_nap_ft: number;
   autopalya_matrica: boolean;
   felszereltseg: string[];
+  available: boolean;
 }

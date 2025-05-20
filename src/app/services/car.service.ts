@@ -1,6 +1,6 @@
 // car.service.ts
 import { Injectable } from '@angular/core';
-import { Car } from '../pages/car-list/car.model';
+import { Car } from '../models/car.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +19,7 @@ export class CarService {
       ar_nap_ft: 12000,
       autopalya_matrica: true,
       felszereltseg: ['klíma', 'GPS', 'tempomat', 'Bluetooth'],
+      available: true,
     },
     {
       id: 2,
@@ -32,6 +33,7 @@ export class CarService {
       ar_nap_ft: 13000,
       autopalya_matrica: true,
       felszereltseg: ['klíma', 'ülésfűtés', 'parkolószenzor'],
+      available: true,
     },
     {
       id: 3,
@@ -45,6 +47,7 @@ export class CarService {
       ar_nap_ft: 11500,
       autopalya_matrica: false,
       felszereltseg: ['klíma', 'Bluetooth'],
+      available: false,
     },
     {
       id: 4,
@@ -58,6 +61,7 @@ export class CarService {
       ar_nap_ft: 10000,
       autopalya_matrica: true,
       felszereltseg: ['klíma', 'GPS', 'automata fényszóró'],
+      available: true,
     },
     {
       id: 5,
@@ -71,6 +75,7 @@ export class CarService {
       ar_nap_ft: 12500,
       autopalya_matrica: false,
       felszereltseg: ['klíma', 'USB csatlakozó'],
+      available: true,
     },
     {
       id: 6,
@@ -84,6 +89,7 @@ export class CarService {
       ar_nap_ft: 13500,
       autopalya_matrica: true,
       felszereltseg: ['klíma', 'tempomat', 'tolatókamera'],
+      available: true,
     },
     {
       id: 7,
@@ -97,6 +103,7 @@ export class CarService {
       ar_nap_ft: 9500,
       autopalya_matrica: false,
       felszereltseg: ['klíma', 'érintőképernyő'],
+      available: true,
     },
     {
       id: 8,
@@ -110,6 +117,7 @@ export class CarService {
       ar_nap_ft: 20000,
       autopalya_matrica: true,
       felszereltseg: ['klíma', 'GPS', 'tolatókamera', 'ülésfűtés', 'autopilot'],
+      available: true,
     },
     {
       id: 9,
@@ -128,6 +136,7 @@ export class CarService {
         'Bluetooth',
         'vezetéstámogató rendszer',
       ],
+      available: true,
     },
     {
       id: 10,
@@ -141,6 +150,7 @@ export class CarService {
       ar_nap_ft: 22000,
       autopalya_matrica: true,
       felszereltseg: ['klíma', 'tempomat', 'parkolóradar'],
+      available: true,
     },
   ];
 

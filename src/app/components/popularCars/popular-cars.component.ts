@@ -9,6 +9,7 @@ import { SyncService } from '../../services/sync.service';
   standalone: true,
   imports: [CommonModule, CarCardComponent],
   templateUrl: './popular-cars.component.html',
+  styleUrls: ['./popular-cars.component.scss'],
 })
 export class PopularCarsComponent implements OnInit {
   popularCars: Car[] = [];

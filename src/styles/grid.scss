@@ -1,19 +1,20 @@
 @use "sass:color";
 
-$gutter: 1rem;
+$gutter: 2rem;
 $columns: 12;
 
 @mixin responsive-grid($breakpoint: 968px) {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  place-items: strech;
+  grid-template-columns: repeat(1, 1fr);
   gap: $gutter;
 
   @media (min-width: $breakpoint) {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (min-width: 1400px) {
-    grid-template-columns: repeat(6, 1fr);
+  @media (min-width: 1440px) {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
@@ -21,7 +22,9 @@ $columns: 12;
   @include responsive-grid();
 
   .grid-item {
-    padding: $gutter;
+    @apply rounded-xl bg-white p-3 shadow-lg hover:shadow-xl;
+    display: flex;
+    flex-direction: column;
     border-radius: 8px;
     text-align: center;
     font-weight: bold;

@@ -1,39 +1,44 @@
 <div class="filter-bar">
   <label>
     Üzemanyag:
-    <select [(ngModel)]="selectedFuel">
+    <select #fuel (change)="updateFuel(fuel.value)">
       <option value="">Összes</option>
-      <option value="benzin">Benzin</option>
-      <option value="dízel">Dízel</option>
-      <option value="elektromos">Elektromos</option>
-      <option value="hibrid">Hibrid</option>
+      <option value="Benzin">Benzin</option>
+      <option value="Dízel">Dízel</option>
+      <option value="Elektromos">Elektromos</option>
+      <option value="Hibrid">Hibrid</option>
     </select>
   </label>
 
   <label>
     Váltó:
-    <select [(ngModel)]="selectedValto">
+    <select #valto (change)="updateValto(valto.value)">
       <option value="">Összes</option>
-      <option value="manuális">Manuális</option>
-      <option value="automata">Automata</option>
+      <option value="Manuális">Manuális</option>
+      <option value="Automata">Automata</option>
     </select>
   </label>
 
   <label>
     Min. személyek:
-    <input type="number" [(ngModel)]="minSzemelyek" min="1" />
+    <input
+      #szemelyek
+      type="number"
+      min="1"
+      (input)="updateMinSzemelyek(szemelyek.value)"
+    />
   </label>
 
   <label>
     Max ár (Ft/nap):
-    <input type="number" [(ngModel)]="maxAr" min="0" />
+    <input #max type="number" min="0" (input)="updateMaxAr(max.value)" />
   </label>
 </div>
 
 <div class="app-grid">
   <app-car-card
     class="grid-item"
-    *ngFor="let car of filteredCars()"
+    *ngFor="let car of filteredCars$ | async"
     [car]="car"
-  />
+  ></app-car-card>
 </div>

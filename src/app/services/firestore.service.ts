@@ -24,9 +24,7 @@ export class FirestoreService {
 
   async getCars(): Promise<Car[]> {
     return firstValueFrom(
-      collectionData(this.carsCollection, { idField: 'id' }) as Observable<
-        Car[]
-      >
+      collectionData(this.carsCollection, { idField: 'id' }) as Observable<Car[]>
     );
   }
 

@@ -32,6 +32,7 @@ export class AuthService {
   }
 
   getCurrentUser(): User | null {
+    console.log({ user: this.auth.currentUser });
     return this.auth.currentUser;
   }
 }

@@ -1,42 +1,49 @@
 import { Routes } from '@angular/router';
-import { RegisterComponent } from './pages/register/register.component';
-import { LoginComponent } from './pages/login/login.component';
-import { HomeComponent } from './pages/home/home.component';
-import { ProfilComponent } from './pages/profil/profil.component';
-import { CarListComponent } from './pages/car-list/car-list.component';
-import { CarManagerComponent } from './pages/admin/car-management/car-manager.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: HomeComponent,
+    loadComponent: () =>
+      import('./pages/home/home.component').then((m) => m.HomeComponent),
   },
   {
     path: 'home',
-    component: HomeComponent,
+    loadComponent: () =>
+      import('./pages/home/home.component').then((m) => m.HomeComponent),
   },
   {
     path: 'register',
-    component: RegisterComponent,
+    loadComponent: () =>
+      import('./pages/register/register.component').then(
+        (m) => m.RegisterComponent
+      ),
   },
   {
     path: 'login',
-    component: LoginComponent,
+    loadComponent: () =>
+      import('./pages/login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'profil',
-    component: ProfilComponent,
+    loadComponent: () =>
+      import('./pages/profil/profil.component').then((m) => m.ProfilComponent),
     canActivate: [authGuard],
   },
   {
     path: 'cars',
-    component: CarListComponent,
+    loadComponent: () =>
+      import('./pages/car-list/car-list.component').then(
+        (m) => m.CarListComponent
+      ),
   },
   {
     path: 'admin',
-    component: CarManagerComponent,
+    loadComponent: () =>
+      import('./pages/admin/car-management/car-manager.component').then(
+        (m) => m.CarManagerComponent
+      ),
     canActivate: [authGuard],
   },
 ];

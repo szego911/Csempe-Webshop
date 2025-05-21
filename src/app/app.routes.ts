@@ -1,6 +1,4 @@
 import { Routes } from '@angular/router';
-import { ProductsListComponent } from './pages/products-list/products-list.component';
-import { CartComponent } from './pages/cart/cart.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -20,10 +18,6 @@ export const routes: Routes = [
     component: HomeComponent,
   },
   {
-    path: 'cart',
-    component: CartComponent,
-  },
-  {
     path: 'register',
     component: RegisterComponent,
   },
@@ -34,15 +28,11 @@ export const routes: Routes = [
   {
     path: 'profil',
     component: ProfilComponent,
-  },
-  {
-    path: 'products',
-    component: ProductsListComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'cars',
     component: CarListComponent,
-    canActivate: [authGuard],
   },
   {
     path: 'admin',

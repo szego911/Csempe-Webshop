@@ -1,0 +1,19 @@
+<div class="grid grid-cols-7 gap-2 text-center">
+  <div class="font-bold">H</div>
+  <div class="font-bold">K</div>
+  <div class="font-bold">Sz</div>
+  <div class="font-bold">Cs</div>
+  <div class="font-bold">P</div>
+  <div class="font-bold">Sz</div>
+  <div class="font-bold">V</div>
+
+  <ng-container *ngFor="let nap of getCurrentMonthDates()">
+    <div
+      [ngClass]="napSzine(nap)"
+      class="rounded p-1 text-sm"
+      (click)="kattNap(nap)"
+    >
+      {{ nap.slice(-2) }}
+    </div>
+  </ng-container>
+</div>

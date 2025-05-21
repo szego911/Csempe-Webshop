@@ -1,0 +1,63 @@
+<div
+  *ngIf="isOpen"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+>
+  <div
+    class="bg-white rounded-xl p-6 shadow-xl w-[90%] md:w-[70%] h-[60%] md:h-[60%]"
+  >
+    <h2 class="text-xl font-bold mb-4">{{ car.marka }} ({{ car.evjarat }})</h2>
+    <p class="text-cyan-600 text-md font-semibold">
+      <strong>Ár:</strong> {{ car.ar_nap_ft | number }} Ft / nap
+    </p>
+    <p class="text-black">
+      <strong>Fogyasztás:</strong>
+      {{ car.fogyasztas_l_100km }} {{ car.uzemanyag | consumptionUnit }}
+    </p>
+    <p class="text-black"><strong>Motor:</strong> {{ car.motor }}</p>
+    <p class="text-black"><strong>Üzemanyag:</strong> {{ car.uzemanyag }}</p>
+    <p class="text-black"><strong>Váltó:</strong> {{ car.valto }}</p>
+    <p class="text-black"><strong>Személyek:</strong> {{ car.szemelyek }}</p>
+    <p>
+      <strong>Matrica:</strong>
+      {{ car.autopalya_matrica ? "Éves országos" : "Nincs" }}
+    </p>
+    <h3 class="text-lg font-bold my-4">Foglaltsági naptár</h3>
+    <app-rental-calendar
+      [carId]="car.id.toString()"
+      (intervalSelected)="
+        form.patchValue({ startDate: $event.start, endDate: $event.end })
+      "
+    />
+    <form [formGroup]="form" class="mt-8" (ngSubmit)="submitRental()">
+      <label>Kezdés dátuma</label>
+      <input
+        type="date"
+        formControlName="startDate"
+        class="w-full mb-2"
+        required
+      />
+      <label>Befejezés dátuma</label>
+      <input
+        type="date"
+        formControlName="endDate"
+        class="w-full mb-4"
+        required
+      />
+
+      <div class="flex gap-4">
+        <button
+          class="flex w-[250px] mt-6 justify-center rounded-md bg-red-500 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          (click)="close()"
+        >
+          Mégse
+        </button>
+        <button
+          type="submit"
+          class="flex w-[250px] mt-6 justify-center rounded-md bg-blue-500 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-blue-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          Bérlés
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

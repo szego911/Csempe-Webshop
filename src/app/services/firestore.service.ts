@@ -7,6 +7,7 @@ import {
   deleteDoc,
   doc,
   CollectionReference,
+  Timestamp,
 } from '@angular/fire/firestore';
 import { Car } from '../models/car.model';
 import { Observable } from 'rxjs';
@@ -36,4 +37,12 @@ export class FirestoreService {
     const carDoc = doc(this.firestore, `cars/${id}`);
     return deleteDoc(carDoc);
   }
+
+  async addRental(rental: any) {
+  const rentalsRef = collection(this.firestore, 'rentals');
+  return await addDoc(rentalsRef, {
+    ...rental,
+    createdAt: Timestamp.now(),
+  });
+}
 }

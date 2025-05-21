@@ -12,6 +12,7 @@ export class SyncService {
     // Szinkronizálunk, ha visszajön az internet
     window.addEventListener('online', () => {
       this.syncOfflineCarsToFirestore();
+      this.syncPendingRentals();
     });
   }
 
@@ -51,5 +52,24 @@ export class SyncService {
     console.log(
       '[SyncService] Offline adatok sikeresen szinkronizálva Firestore-ba.'
     );
+  }
+
+  async syncPendingRentals() {
+    const pending = await this.indexedDBService.getAllPendingRentals();
+
+    for (const rental of pending) {
+      try {
+        await this.firestoreService.addRental(rental); // csak ha ez sikerül
+        await this.indexedDBService.removeRental(rental.id);
+        console.log(`[SYNC] Feltöltve és törölve: ${rental.id}`);
+      } catch (error) {
+        console.error(`[SYNC] Sikertelen feltöltés: ${rental.id}`, error);
+        // nem törlünk, újrapróbálható marad
+      }
+    }
+  }
+
+  markPending(collection: string, data: any): void {
+    console.log(`[SyncService] Pending item added to '${collection}'`, data);
   }
 }

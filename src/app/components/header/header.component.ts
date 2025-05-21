@@ -1,7 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { CartService } from '../../services/cart.service';
 import { RouterLink } from '@angular/router';
-import { PrimaryButtonComponent } from '../primary-button/primary-button.component';
 import { LogoutButtonComponent } from '../logOutButton/logout-button.component';
 import { AuthService } from '../../services/auth.service';
 import { AsyncPipe, NgIf } from '@angular/common';
@@ -9,13 +7,7 @@ import { AsyncPipe, NgIf } from '@angular/common';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [
-    PrimaryButtonComponent,
-    RouterLink,
-    LogoutButtonComponent,
-    AsyncPipe,
-    NgIf,
-  ],
+  imports: [RouterLink, LogoutButtonComponent, AsyncPipe, NgIf],
   template: `
     <div
       class="bg-slate-100 px-4 py-3 shadow-md flex justify-between items-center"
@@ -23,7 +15,6 @@ import { AsyncPipe, NgIf } from '@angular/common';
       <button class="text-2xl" routerLink="/">CityRides</button>
       <div class="flex gap-10 sm:gap-4 text-lg">
         <a routerLink="/home">Főoldal</a>
-        <a routerLink="/products">Termékek</a>
         <a routerLink="/cars">Autóink</a>
 
         <ng-container
@@ -38,15 +29,10 @@ import { AsyncPipe, NgIf } from '@angular/common';
           <a routerLink="/register">Regisztráció</a>
         </ng-template>
       </div>
-
-      <app-primary-button label="{{ cartLabel() }}" routerLink="/cart" />
     </div>
   `,
   styles: ``,
 })
 export class HeaderComponent {
   constructor(public authService: AuthService) {}
-  cartService = inject(CartService);
-
-  cartLabel = computed(() => `Kosár (${this.cartService.cart().length})`);
 }

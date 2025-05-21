@@ -75,6 +75,5 @@ export class RentalModalComponent {
 
   close() {
     this.isOpen = false;
-    this.form.reset();
   }
 }

@@ -2,7 +2,7 @@
   <h2 class="text-2xl font-semibold text-slate-700 text-center">
     Népszerű autóink
   </h2>
-  <div class="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-10">
+  <div class="flex flex-col md:flex-row mx-auto px-5">
     <app-car-card *ngFor="let car of popularCars" [car]="car" />
   </div>
 </section>

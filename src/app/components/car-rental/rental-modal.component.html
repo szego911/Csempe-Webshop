@@ -1,9 +1,6 @@
-<div
-  *ngIf="isOpen"
-  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
->
+<div *ngIf="isOpen" class="fixed inset-0 bg-black/50 flex justify-center z-50">
   <div
-    class="bg-white rounded-xl p-6 shadow-xl w-[90%] md:w-[70%] h-[60%] md:h-[60%]"
+    class="bg-white rounded-xl p-6 shadow-xl w-[90%] md:w-[70%] h-[60%] md:h-[80%]"
   >
     <h2 class="text-xl font-bold mb-4">{{ car.marka }} ({{ car.evjarat }})</h2>
     <p class="text-cyan-600 text-md font-semibold">
@@ -28,21 +25,23 @@
         form.patchValue({ startDate: $event.start, endDate: $event.end })
       "
     />
-    <form [formGroup]="form" class="mt-8" (ngSubmit)="submitRental()">
-      <label>Kezdés dátuma</label>
-      <input
-        type="date"
-        formControlName="startDate"
-        class="w-full mb-2"
-        required
-      />
-      <label>Befejezés dátuma</label>
-      <input
-        type="date"
-        formControlName="endDate"
-        class="w-full mb-4"
-        required
-      />
+    <form [formGroup]="form" class="mt-4" (ngSubmit)="submitRental()">
+      <div class="flex gap-5">
+        <label>Kezdés dátuma</label>
+        <input
+          type="date"
+          formControlName="startDate"
+          class="w-50 mb-2"
+          required
+        />
+        <label>Befejezés dátuma</label>
+        <input
+          type="date"
+          formControlName="endDate"
+          class="w-50 mb-4"
+          required
+        />
+      </div>
 
       <div class="flex gap-4">
         <button

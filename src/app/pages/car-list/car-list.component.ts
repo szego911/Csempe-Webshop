@@ -1,7 +1,6 @@
 // car-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Car } from '../../models/car.model';
-import { CarService } from '../../services/car.service';
 import { SyncService } from '../../services/sync.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -12,7 +11,6 @@ import { CarCardComponent } from '../../components/car-card/car-card.component';
   standalone: true,
   imports: [FormsModule, CommonModule, CarCardComponent],
   templateUrl: './car-list.component.html',
-  styleUrls: ['./car-list.component.css'],
 })
 export class CarListComponent implements OnInit {
   cars: Car[] = [];

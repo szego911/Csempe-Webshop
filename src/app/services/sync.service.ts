@@ -46,7 +46,7 @@ export class SyncService {
     for (const car of offlineCars) {
       const { id, ...carData } = car; // Firestore generál új id-t
       await this.firestoreService.addCar(carData);
-      await this.indexedDBService.deleteData(id);
+      //await this.indexedDBService.deleteData(id);
     }
 
     console.log(

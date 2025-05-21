@@ -3,6 +3,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { SyncService } from './services/sync.service';
 
 @Component({
   selector: 'app-root',
@@ -28,12 +29,18 @@ export class AppComponent implements OnInit {
   deferredPrompt: any = null;
   showInstallButton = false;
 
+  constructor(private syncService: SyncService) {}
   ngOnInit(): void {
     window.addEventListener('beforeinstallprompt', (event: Event) => {
       event.preventDefault();
       this.deferredPrompt = event;
       this.showInstallButton = true;
     });
+
+    if (navigator.onLine) {
+      this.syncService.refreshCarsFromFirestore();
+      this.syncService.refreshRentalsFromFirestore();
+    }
   }
 
   installApp() {

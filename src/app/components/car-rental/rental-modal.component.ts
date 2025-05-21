@@ -20,7 +20,7 @@ import { ConsumptionUnitPipe } from '../../pipes/consumption.pipe';
 })
 export class RentalModalComponent {
   @Input() car!: Car;
-  @Input() carId!: string;
+  @Input() carId!: number;
 
   isOpen = false;
   form: FormGroup;

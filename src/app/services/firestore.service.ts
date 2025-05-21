@@ -10,6 +10,7 @@ import {
   Timestamp,
 } from '@angular/fire/firestore';
 import { Car } from '../models/car.model';
+import { Rental } from '../models/rental.model';
 import { Observable } from 'rxjs';
 import { firstValueFrom } from 'rxjs';
 
@@ -38,11 +39,18 @@ export class FirestoreService {
     return deleteDoc(carDoc);
   }
 
+  async getAllRentals(): Promise<Rental[]> {
+    const rentalsRef = collection(this.firestore, 'rentals');
+    return firstValueFrom(
+      collectionData(rentalsRef, { idField: 'id' }) as Observable<Rental[]>
+    );
+  }
+
   async addRental(rental: any) {
-  const rentalsRef = collection(this.firestore, 'rentals');
-  return await addDoc(rentalsRef, {
-    ...rental,
-    createdAt: Timestamp.now(),
-  });
-}
+    const rentalsRef = collection(this.firestore, 'rentals');
+    return await addDoc(rentalsRef, {
+      ...rental,
+      createdAt: Timestamp.now(),
+    });
+  }
 }

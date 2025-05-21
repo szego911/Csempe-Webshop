@@ -1,7 +1,8 @@
 export interface Rental {
-  id: number;
+  id: string;
   carId: number;
   userId: string;
   startDate: string; // ISO date
   endDate: string;
+  createdAt: string;
 }

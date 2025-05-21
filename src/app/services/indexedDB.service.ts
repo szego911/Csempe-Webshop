@@ -5,8 +5,8 @@ import { Injectable } from '@angular/core';
 })
 export class IndexedDBService {
   private dbName = 'CarsDB';
-  private carStore = 'cars';
-  private rentalStore = 'rentals';
+  public readonly carStore = 'cars';
+  public readonly rentalStore = 'rentals';
   private db!: IDBDatabase;
   private initReady: Promise<void>;
 
@@ -21,17 +21,14 @@ export class IndexedDBService {
       request.onupgradeneeded = () => {
         const db = request.result;
 
-        // cars tároló
-        if (!db.objectStoreNames.contains('cars')) {
-          db.createObjectStore('cars', {
+        if (!db.objectStoreNames.contains(this.carStore)) {
+          db.createObjectStore(this.carStore, {
             keyPath: 'id',
-            autoIncrement: true,
           });
         }
 
-        // rentals tároló
-        if (!db.objectStoreNames.contains('rentals')) {
-          db.createObjectStore('rentals', {
+        if (!db.objectStoreNames.contains(this.rentalStore)) {
+          db.createObjectStore(this.rentalStore, {
             keyPath: 'id',
           });
         }
@@ -53,88 +50,81 @@ export class IndexedDBService {
     });
   }
 
-  // ─────────────── AUTÓK ───────────────
-  async addData(data: any): Promise<void> {
+  // ───── Általános metódusok ─────
+
+  async addData(data: any, storeName: string): Promise<void> {
     await this.initReady;
-    const dataToAdd = JSON.parse(JSON.stringify(data));
-    if ('id' in dataToAdd) delete dataToAdd.id;
+    const dataToAdd = { ...data };
+
+    // Ha nincs id vagy autoIncrement van, ne adjuk hozzá manuálisan
+    if (!dataToAdd.id) {
+      dataToAdd.id = crypto.randomUUID();
+    }
 
     return new Promise((resolve, reject) => {
-      const tx = this.db.transaction(this.carStore, 'readwrite');
-      const store = tx.objectStore(this.carStore);
+      const tx = this.db.transaction(storeName, 'readwrite');
+      const store = tx.objectStore(storeName);
       const request = store.add(dataToAdd);
       request.onsuccess = () => resolve();
       request.onerror = () => reject(request.error);
     });
   }
 
-  async getAllData(): Promise<any[]> {
+  async getAllData(storeName: string): Promise<any[]> {
     await this.initReady;
     return new Promise((resolve, reject) => {
-      const tx = this.db.transaction(this.carStore, 'readonly');
-      const store = tx.objectStore(this.carStore);
+      const tx = this.db.transaction(storeName, 'readonly');
+      const store = tx.objectStore(storeName);
       const request = store.getAll();
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });
   }
 
-  async updateData(data: any): Promise<void> {
+  async updateData(data: any, storeName: string): Promise<void> {
     await this.initReady;
     return new Promise((resolve, reject) => {
-      const tx = this.db.transaction(this.carStore, 'readwrite');
-      const store = tx.objectStore(this.carStore);
+      const tx = this.db.transaction(storeName, 'readwrite');
+      const store = tx.objectStore(storeName);
       const request = store.put(data);
       request.onsuccess = () => resolve();
       request.onerror = () => reject(request.error);
     });
   }
 
-  async deleteData(id: number): Promise<void> {
+  async deleteData(id: string | number, storeName: string): Promise<void> {
     await this.initReady;
     return new Promise((resolve, reject) => {
-      const tx = this.db.transaction(this.carStore, 'readwrite');
-      const store = tx.objectStore(this.carStore);
+      const tx = this.db.transaction(storeName, 'readwrite');
+      const store = tx.objectStore(storeName);
       const request = store.delete(id);
       request.onsuccess = () => resolve();
       request.onerror = () => reject(request.error);
     });
   }
 
-  // ─────────────── BÉRLÉSEK ───────────────
-
-  async addRental(rental: any): Promise<void> {
+  async clearStore(storeName: string): Promise<void> {
     await this.initReady;
-    const data = { ...rental, id: crypto.randomUUID() };
-
     return new Promise((resolve, reject) => {
-      const tx = this.db.transaction(this.rentalStore, 'readwrite');
-      const store = tx.objectStore(this.rentalStore);
-      const request = store.add(data);
+      const tx = this.db.transaction(storeName, 'readwrite');
+      const store = tx.objectStore(storeName);
+      const request = store.clear();
       request.onsuccess = () => resolve();
       request.onerror = () => reject(request.error);
     });
+  }
+
+  // ───── Speciális rövidítések (opcionális) ─────
+
+  async addRental(rental: any): Promise<void> {
+    return await this.addData(rental, this.rentalStore);
   }
 
   async getAllPendingRentals(): Promise<any[]> {
-    await this.initReady;
-    return new Promise((resolve, reject) => {
-      const tx = this.db.transaction(this.rentalStore, 'readonly');
-      const store = tx.objectStore(this.rentalStore);
-      const request = store.getAll();
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-    });
+    return await this.getAllData(this.rentalStore);
   }
 
   async removeRental(id: string): Promise<void> {
-    await this.initReady;
-    return new Promise((resolve, reject) => {
-      const tx = this.db.transaction(this.rentalStore, 'readwrite');
-      const store = tx.objectStore(this.rentalStore);
-      const request = store.delete(id);
-      request.onsuccess = () => resolve();
-      request.onerror = () => reject(request.error);
-    });
+    return await this.deleteData(id, this.rentalStore);
   }
 }

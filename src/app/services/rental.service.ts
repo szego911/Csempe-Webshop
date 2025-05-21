@@ -1,49 +1,45 @@
 import { Injectable } from '@angular/core';
-import {
-  Firestore,
-  collection,
-  query,
-  where,
-  getDocs,
-  addDoc,
-  Timestamp,
-} from '@angular/fire/firestore';
 import { FirestoreService } from './firestore.service';
 import { IndexedDBService } from './indexedDB.service';
 import { SyncService } from './sync.service';
+import { Rental } from '../models/rental.model';
 
 @Injectable({ providedIn: 'root' })
 export class RentalService {
   constructor(
-    private firestore: Firestore,
     private firestoreService: FirestoreService,
     private indexedDBService: IndexedDBService,
     private syncService: SyncService
   ) {}
 
   async isCarAvailable(
-    carId: string,
+    carId: number,
     startDate: string,
     endDate: string
   ): Promise<boolean> {
-    const rentalsRef = collection(this.firestore, 'rentals');
-    const q = query(
-      rentalsRef,
-      where('carId', '==', carId),
-      where('startDate', '<=', endDate),
-      where('endDate', '>=', startDate)
+    const rentals: Rental[] = await this.indexedDBService.getAllData(
+      this.indexedDBService.rentalStore
     );
-    const snapshot = await getDocs(q);
-    return snapshot.empty;
+
+    // Ellenőrizze, van-e átfedő foglalás helyileg
+    const overlapping = rentals.some(
+      (rental) =>
+        rental.carId === carId &&
+        rental.startDate <= endDate &&
+        rental.endDate >= startDate
+    );
+
+    return !overlapping;
   }
 
   async rentCar(
-    carId: string,
+    carId: number,
     userId: string,
     startDate: string,
     endDate: string
   ) {
-    const rental = {
+    const rental: Rental = {
+      id: crypto.randomUUID(), 
       carId,
       userId,
       startDate,
@@ -51,14 +47,12 @@ export class RentalService {
       createdAt: new Date().toISOString(),
     };
 
-    if (navigator.onLine) {
-      // Online mentés Firestore-ba
-      return await this.firestoreService.addRental(rental);
-    } else {
-      // Offline mentés IndexedDB-be
-      await this.indexedDBService.addRental(rental);
-      this.syncService.markPending('rentals', rental); // egyedi szinkronkulcs
-      return { offlineSaved: true };
-    }
+    await this.indexedDBService.addData(
+      rental,
+      this.indexedDBService.rentalStore
+    );
+    this.syncService.markPending('rentals', rental);
+
+    return { offlineSaved: true };
   }
 }

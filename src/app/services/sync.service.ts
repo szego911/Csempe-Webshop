@@ -9,67 +9,104 @@ export class SyncService {
     private firestoreService: FirestoreService,
     private indexedDBService: IndexedDBService
   ) {
-    // Szinkronizálunk, ha visszajön az internet
-    window.addEventListener('online', () => {
-      this.syncOfflineCarsToFirestore();
-      this.syncPendingRentals();
+    // Ha visszajön az internet, próbáljunk szinkronizálni
+    window.addEventListener('online', async () => {
+      await this.syncCarsToFirestore();
+      await this.syncPendingRentals();
     });
   }
 
+  async refreshCarsFromFirestore(): Promise<void> {
+    if (!navigator.onLine) return;
+
+    try {
+      const cars = await this.firestoreService.getCars();
+      await this.indexedDBService.clearStore(this.indexedDBService.carStore);
+      for (const car of cars) {
+        await this.indexedDBService.addData(
+          car,
+          this.indexedDBService.carStore
+        );
+      }
+      console.log('[SyncService] Autók frissítve Firestore → IndexedDB');
+    } catch (err) {
+      console.error('[SyncService] Hiba autók frissítésekor:', err);
+    }
+  }
+
+  async refreshRentalsFromFirestore(): Promise<void> {
+    if (!navigator.onLine) return;
+
+    try {
+      const rentals = await this.firestoreService.getAllRentals();
+      await this.indexedDBService.clearStore(this.indexedDBService.rentalStore);
+      for (const rental of rentals) {
+        await this.indexedDBService.addData(
+          rental,
+          this.indexedDBService.rentalStore
+        );
+      }
+      console.log('[SyncService] Foglalások frissítve Firestore → IndexedDB');
+    } catch (err) {
+      console.error('[SyncService] Hiba foglalások frissítésekor:', err);
+    }
+  }
+
   async getCars(): Promise<Car[]> {
-    if (navigator.onLine) {
-      return await this.firestoreService.getCars();
-    } else {
-      return await this.indexedDBService.getAllData();
-    }
-  }
-
-  async addCar(car: Car) {
-    if (navigator.onLine) {
-      await this.firestoreService.addCar(car);
-    } else {
-      await this.indexedDBService.addData(car);
-    }
-  }
-
-  async deleteCar(id: string) {
-    if (navigator.onLine) {
-      await this.firestoreService.deleteCar(id);
-    } else {
-      await this.indexedDBService.deleteData(Number(id)); // IndexedDB-ben az id szám
-    }
-  }
-
-  async syncOfflineCarsToFirestore() {
-    const offlineCars = await this.indexedDBService.getAllData();
-
-    for (const car of offlineCars) {
-      const { id, ...carData } = car; // Firestore generál új id-t
-      await this.firestoreService.addCar(carData);
-      //await this.indexedDBService.deleteData(id);
-    }
-
-    console.log(
-      '[SyncService] Offline adatok sikeresen szinkronizálva Firestore-ba.'
+    return await this.indexedDBService.getAllData(
+      this.indexedDBService.carStore
     );
   }
 
+  async addCar(car: Car) {
+    await this.indexedDBService.addData(car, this.indexedDBService.carStore);
+  }
+
+  async deleteCar(id: string) {
+    await this.indexedDBService.deleteData(
+      Number(id),
+      this.indexedDBService.carStore
+    );
+  }
+
+  async syncCarsToFirestore() {
+    if (!navigator.onLine) return;
+
+    const localCars = await this.indexedDBService.getAllData(
+      this.indexedDBService.carStore
+    );
+    const remoteCars = await this.firestoreService.getCars();
+
+    const remoteIds = new Set(remoteCars.map((c) => c.id));
+
+    for (const car of localCars) {
+      if (!remoteIds.has(car.id)) {
+        await this.firestoreService.addCar(car);
+      }
+    }
+
+    console.log('[SyncService] Autók szinkronizálva IndexedDB → Firestore');
+  }
+
   async syncPendingRentals() {
+    if (!navigator.onLine) return;
+
     const pending = await this.indexedDBService.getAllPendingRentals();
 
     for (const rental of pending) {
       try {
-        await this.firestoreService.addRental(rental); // csak ha ez sikerül
-        await this.indexedDBService.removeRental(rental.id);
-        console.log(`[SYNC] Feltöltve és törölve: ${rental.id}`);
+        await this.firestoreService.addRental(rental);
+        console.log(`[SYNC] Foglalás feltöltve: ${rental.id}`);
       } catch (error) {
-        console.error(`[SYNC] Sikertelen feltöltés: ${rental.id}`, error);
-        // nem törlünk, újrapróbálható marad
+        console.error(
+          `[SYNC] Foglalás feltöltése sikertelen: ${rental.id}`,
+          error
+        );
       }
     }
   }
 
   markPending(collection: string, data: any): void {
-    console.log(`[SyncService] Pending item added to '${collection}'`, data);
+    console.log(`[SyncService] Függőben lévő elem: '${collection}'`, data);
   }
 }

@@ -1,0 +1,51 @@
+@use "../../../styles/grid" as *;
+
+@use "sass:color";
+
+// ─── Változók ─────────────────────────────
+$spacing: 1.5rem;
+$label-color: #1a1a1a;
+$input-border: #cbd5e1;
+$input-radius: 6px;
+$highlight: #3498db;
+
+// ─── Saját mixin ─────────────────────────
+@mixin field-style {
+  border: 1px solid $input-border;
+  border-radius: $input-radius;
+  padding: 0.4rem 0.6rem;
+  margin-left: 0.5rem;
+  font-size: 0.95rem;
+
+  &:focus {
+    outline: none;
+    border-color: color.adjust($highlight, $lightness: 10%);
+  }
+}
+
+// ─── Komponens stílus ────────────────────
+.filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing;
+  padding: $spacing;
+  padding-bottom: 0;
+  padding-top: 2rem;
+  margin-inline: 2.75rem;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color: $label-color;
+
+    select,
+    input[type="number"] {
+      @include field-style;
+    }
+  }
+}

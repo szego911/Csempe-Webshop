@@ -11,6 +11,7 @@ import { CarCardComponent } from '../../components/car-card/car-card.component';
   standalone: true,
   imports: [FormsModule, CommonModule, CarCardComponent],
   templateUrl: './car-list.component.html',
+  styleUrls: ['./car-list.component.scss'],
 })
 export class CarListComponent implements OnInit {
   cars: Car[] = [];

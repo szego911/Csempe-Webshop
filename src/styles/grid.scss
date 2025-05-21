@@ -1,0 +1,33 @@
+@use "sass:color";
+
+$gutter: 1rem;
+$columns: 12;
+
+@mixin responsive-grid($breakpoint: 968px) {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $gutter;
+
+  @media (min-width: $breakpoint) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (min-width: 1400px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.app-grid {
+  @include responsive-grid();
+
+  .grid-item {
+    padding: $gutter;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

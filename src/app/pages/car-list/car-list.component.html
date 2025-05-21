@@ -1,6 +1,6 @@
-<div class="flex flex-col lg:flex-row gap-[25px] p-5 pb-0 pt-7 mx-11">
-  <label
-    ><strong>Üzemanyag:</strong>
+<div class="filter-bar">
+  <label>
+    Üzemanyag:
     <select [(ngModel)]="selectedFuel">
       <option value="">Összes</option>
       <option value="benzin">Benzin</option>
@@ -10,8 +10,8 @@
     </select>
   </label>
 
-  <label
-    ><strong>Váltó:</strong>
+  <label>
+    Váltó:
     <select [(ngModel)]="selectedValto">
       <option value="">Összes</option>
       <option value="manuális">Manuális</option>
@@ -19,27 +19,21 @@
     </select>
   </label>
 
-  <label
-    ><strong>Min. személyek: </strong>
-    <input
-      class="border border-slate-300 rounded-md ml-2"
-      type="number"
-      [(ngModel)]="minSzemelyek"
-      min="1"
-    />
+  <label>
+    Min. személyek:
+    <input type="number" [(ngModel)]="minSzemelyek" min="1" />
   </label>
 
-  <label
-    ><strong> Max ár (Ft/nap):</strong>
-    <input
-      class="border border-slate-300 rounded-md ml-2"
-      type="number"
-      [(ngModel)]="maxAr"
-      min="0"
-    />
+  <label>
+    Max ár (Ft/nap):
+    <input type="number" [(ngModel)]="maxAr" min="0" />
   </label>
 </div>
 
-<div class="flex flex-col md:flex-row mx-auto px-5">
-  <app-car-card *ngFor="let car of filteredCars()" [car]="car" />
+<div class="app-grid">
+  <app-car-card
+    class="grid-item"
+    *ngFor="let car of filteredCars()"
+    [car]="car"
+  />
 </div>

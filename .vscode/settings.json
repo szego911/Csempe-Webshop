@@ -1,0 +1,7 @@
+{
+  "tailwindCSS.includeLanguages": {
+    "scss": "scss"
+  },
+  "tailwindCSS.experimental.classRegex": [],
+  "tailwindCSS.files.exclude": ["**/grid.scss"]
+}
